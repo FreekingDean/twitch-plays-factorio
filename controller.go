@@ -65,7 +65,7 @@ var mouseMultiplier = time.Duration(8)
 
 func parseCommand(command string) {
 	fmt.Printf("\"%s\"\n", command)
-	re := regexp.MustCompile("(up$|down$|left$|right$|e$|p\\((\\d+),(\\d+)\\)$|s\\((\\d+),(\\d+)\\)$)")
+	re := regexp.MustCompile("(up$|down$|left$|right$|e$|q$|p\\((\\d+),(\\d+)\\)$|s\\((\\d+),(\\d+)\\)$)")
 	commandStringsTop := re.FindAllStringSubmatch(command, -1)
 	if len(commandStringsTop) <= 0 {
 		return
@@ -77,6 +77,8 @@ func parseCommand(command string) {
 	fmt.Println("\"" + commandStrings[1] + "\"")
 	if commandStrings[1] == "e" {
 		robotgo.KeyTap("e")
+	} else if commandStrings[1] == "q" {
+		robotgo.KeyTap("q")
 	} else if commandStrings[1] == "up" {
 		robotgo.KeyToggle("w", "down")
 		time.Sleep(toggleTime * time.Millisecond)
