@@ -4,18 +4,27 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/go-vgo/robotgo"
+	"github.com/joho/godotenv"
 	"net"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 )
 
-var token = os.Getenv("TWITCH_OAUTH")
-var nickname = os.Getenv("TWITCH_NICKNAME")
-var channel = os.Getenv("TWITCH_CHANNEL")
+var token string
+var nickname string
+var channel string
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+	token = os.Getenv("TWITCH_OAUTH")
+	nickname = os.Getenv("TWITCH_NICKNAME")
+	channel = os.Getenv("TWITCH_CHANNEL")
 	lines := make(chan string)
 	conn := connect(lines)
 	defer conn.Close()
@@ -98,6 +107,9 @@ func parseCommand(command string) {
 	} else if strings.HasPrefix(commandStrings[1], "p") {
 		x, _ := strconv.Atoi(commandStrings[2])
 		y, _ := strconv.Atoi(commandStrings[3])
+		if x > 1770 && x < 1835 && y > 50 && y < 110 {
+			return
+		}
 		robotgo.Move(x, y)
 		robotgo.MouseToggle("down", "left")
 		time.Sleep(toggleTime * mouseMultiplier * time.Millisecond)
