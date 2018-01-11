@@ -56,7 +56,7 @@ func CreateTwitchCommander(oauthToken, nickname, channelName string) *TwitchComm
 type commandFunc func(map[string]string)
 
 func (t *TwitchCommander) AddCommand(name string, handler commandFunc, args ...string) {
-	commandRegex := "^[!|?]?" + name
+	commandRegex := "^[!@#$]?" + name
 	if len(args) > 0 {
 		commandRegex += "\\("
 		commandArgRegexes := make([]string, len(args))
@@ -100,18 +100,14 @@ func (t *TwitchCommander) Close() {
 func (t *TwitchCommander) ConnectAndListen() {
 	t.Connect()
 	defer t.Close()
-	go t.StartListener()
 	t.Authenticate()
-	select {}
+	t.StartListener()
 }
 
 func (t *TwitchCommander) Authenticate() {
-	err := t.Send("PASS oauth:" + t.config.oauthToken)
-	fmt.Println(err)
-	err = t.Send("NICK " + t.config.nickname)
-	fmt.Println(err)
-	err = t.Send("JOIN " + t.config.channelName)
-	fmt.Println(err)
+	t.Send("PASS oauth:" + t.config.oauthToken)
+	t.Send("NICK " + t.config.nickname)
+	t.Send("JOIN #" + t.config.channelName)
 }
 
 func (t *TwitchCommander) Send(message string) error {
@@ -131,7 +127,6 @@ func (t *TwitchCommander) StartListener() {
 			fmt.Println(err)
 			panic(err)
 		} else {
-			fmt.Println(string(line))
 			t.handleMessage(string(line))
 		}
 	}

@@ -1,7 +1,8 @@
 package main
 
 import (
-	//"github.com/go-vgo/robotgo"
+	"github.com/go-vgo/robotgo"
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"strconv"
@@ -14,6 +15,10 @@ const (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
 	commander := CreateTwitchCommander(
 		os.Getenv("TWITCH_OAUTH"),
 		os.Getenv("TWITCH_NICKNAME"),
@@ -21,7 +26,9 @@ func main() {
 	)
 
 	commander.AddCommand("inv", openInventory)
+	commander.AddCommand("e", openInventory)
 	commander.AddCommand("rot", rotateObject)
+	commander.AddCommand("r", rotateObject)
 
 	commander.AddCommand("up", moveUp)
 	commander.AddCommand("down", moveDown)
@@ -34,13 +41,13 @@ func main() {
 }
 
 func openInventory(_ map[string]string) {
-	//robotgo.KeyTap("e")
-	log.Println("E")
+	robotgo.KeyTap("e")
+	log.Println("e")
 }
 
 func rotateObject(_ map[string]string) {
-	//robotgo.KeyTap("r")
-	log.Println("R")
+	robotgo.KeyTap("r")
+	log.Println("r")
 }
 
 func moveUp(_ map[string]string) {
@@ -57,9 +64,9 @@ func moveRight(_ map[string]string) {
 }
 
 func longKeystroke(key string) {
-	//robotgo.KeyToggle(key, "down")
+	robotgo.KeyToggle(key, "down")
 	time.Sleep(TOGGLE_TIME * time.Millisecond)
-	//robotgo.KeyToggle(key, "up")
+	robotgo.KeyToggle(key, "up")
 	log.Println(key)
 }
 
@@ -84,8 +91,8 @@ func toggleClick(strX, strY, button string) {
 	}
 	log.Println(x, y)
 	log.Println(button)
-	//robotgo.Move(x, y)
-	//robotgo.MouseToggle("down", button)
+	robotgo.Move(x, y)
+	robotgo.MouseToggle("down", button)
 	time.Sleep(TOGGLE_TIME * MOUSE_TOGGLE_MULTIPLIER * time.Millisecond)
-	//robotgo.MouseToggle("up", button)
+	robotgo.MouseToggle("up", button)
 }
