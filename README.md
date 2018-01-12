@@ -13,4 +13,4 @@ $(".player-overlay").on('mousedown',function(e) {
   $('[data-a-target=chat-input]').val( (e.button == 0?'p':'s')+"("+parseInt(e.offsetX / e.target.offsetWidth*1920)+","+parseInt(e.offsetY/ e.target.offsetHeight*1080)+")").focus();
 });
 ```
-You can use your mouse button to send clicks! Thanks [@fumai](https://github.com/fuami)!
+You can use your mouse button on the screen, to send type a space then hit enter! Thanks [@fuami](https://github.com/fuami)!
